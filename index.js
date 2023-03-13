@@ -8,17 +8,17 @@ function renderProducts() {
   products.forEach((product) => {
     productsEl.innerHTML += `
         <div class= "product-images">
-          <div class="large-img slideshow-container" onclick ="openHiddenImage()">
-            <div class="big-img slides">
+          <div class="large-img slideshow-container">
+            <div class="big-img slides" onclick ="openHiddenImage()">
               <img src="${product.imgSrc}" alt="product picture 1" />
             </div>
-            <div class="big-img slides">
+            <div class="big-img slides" onclick ="openHiddenImage()">
               <img src="/images/image-product-2.jpg" alt="product picture 2" />
             </div>
-            <div class="big-img slides">
+            <div class="big-img slides" onclick ="openHiddenImage()">
               <img src="/images/image-product-3.jpg" alt="product picture 3" />
             </div>
-            <div class="big-img slides">
+            <div class="big-img slides" onclick ="openHiddenImage()">
               <img src="/images/image-product-4.jpg" alt="product picture 4" />
             </div>
 
