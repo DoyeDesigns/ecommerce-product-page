@@ -1,61 +1,53 @@
-const menuEl = document.querySelector("#close-btn")
-const cartDropDownEl = document.querySelector(".cart-dropDown")
-const productsEl = document.querySelector(".container")
-const products = [
-  {
-      id: 0,
-      name: "Fall Limited Edition Sneakers",
-      price: 125,
-      instock: 100,
-      imgSrc: "./images/image-product-1.jpg",
-      thumnailImgSrc: "./images/image-product-1-thumbnail.jpg",
-    }
-]
+const menuEl = document.querySelector("#close-btn");
+const cartDropDownEl = document.querySelector(".cart-dropDown");
+const productsEl = document.querySelector(".container");
+const cartItemsEl = document.querySelector(".cart-items");
+const hiddenImgEl = document.querySelector(".hidden-images-container");
 
 function renderProducts() {
   products.forEach((product) => {
     productsEl.innerHTML += `
-    <div class= "product-images">
-          <div class="large-img slideshow-container">
-            <div class="big-img slides fade">
-              <img src="${products.imgSrc}" alt="product picture 1" />
+        <div class= "product-images">
+          <div class="large-img slideshow-container" onclick ="openHiddenImage()">
+            <div class="big-img slides">
+              <img src="${product.imgSrc}" alt="product picture 1" />
             </div>
-            <div class="big-img not-active slides fade">
+            <div class="big-img slides">
               <img src="/images/image-product-2.jpg" alt="product picture 2" />
             </div>
-            <div class="big-img not-active slides fade">
+            <div class="big-img slides">
               <img src="/images/image-product-3.jpg" alt="product picture 3" />
             </div>
-            <div class="big-img not-active slides fade">
+            <div class="big-img slides">
               <img src="/images/image-product-4.jpg" alt="product picture 4" />
             </div>
 
-            <a class="prev" onclick="moveSlide(-1)"><svg width="12" height="18" xmlns="http://www.w3.org/2000/svg"><path d="M11 1 3 9l8 8" stroke="#1D2026" stroke-width="3" fill="none" fill-rule="evenodd"/></svg></a>
-            <a class="next" onclick="moveSlide(1)"><svg width="13" height="18" xmlns="http://www.w3.org/2000/svg"><path d="m2 1 8 8-8 8" stroke="#1D2026" stroke-width="3" fill="none" fill-rule="evenodd"/></svg></a>
+            <a class="prev-Hidden" onclick="moveSlide(-1)"><svg width="12" height="18" xmlns="http://www.w3.org/2000/svg"><path d="M11 1 3 9l8 8" stroke="#1D2026" stroke-width="3" fill="none" fill-rule="evenodd"/></svg></a>
+            <a class="next-Hidden" onclick="moveSlide(1)"><svg width="13" height="18" xmlns="http://www.w3.org/2000/svg"><path d="m2 1 8 8-8 8" stroke="#1D2026" stroke-width="3" fill="none" fill-rule="evenodd"/></svg></a>
           </div>
           <div class="thumbnail-container">
             <span class="thumbnailImage" onclick="currentSlide(1)">
               <img
-                src="${products.thumnailImgSrc}"
+                src="${product.thumnailImgSrc}"
                 alt="product picture 1"
               />
             </span>
 
-            <span class="not-yet-active thumbnailImage" onclick="currentSlide(2)">
+            <span class="thumbnailImage" onclick="currentSlide(2)">
               <img
                 src="/images/image-product-2-thumbnail.jpg"
                 alt="product picture 2"
               />
             </span>
 
-            <span class="not-yet-active thumbnailImage" onclick="currentSlide(3)">
+            <span class="thumbnailImage" onclick="currentSlide(3)">
               <img
                 src="/images/image-product-3-thumbnail.jpg"
                 alt="product picture 3"
               />
             </span>
 
-            <span class="not-yet-active thumbnailImage" onclick="currentSlide(4)">
+            <span class="thumbnailImage" onclick="currentSlide(4)">
               <img
                 src="/images/image-product-4-thumbnail.jpg"
                 alt="product picture 4"
@@ -66,7 +58,7 @@ function renderProducts() {
         <div class="product-desc">
           <div class="product-info">
             <h1><strong>sneaker Company</strong></h1>
-            <h2>${products.name}</h2>
+            <h2>${product.name}</h2>
 
             <p>
               These low-profile sneakers are your perfect casual wear companion.
@@ -76,7 +68,7 @@ function renderProducts() {
 
             <div class="price">
               <div class="new-price-container align-items-center">
-                <h3><strong>$${products.price}</strong></h3>
+                <h3><strong>$${product.price}</strong></h3>
                 <div class="discount">
                   <p><strong>50%</strong></p>
                 </div>
@@ -101,10 +93,10 @@ function renderProducts() {
                         id="a"
                       />
                     </defs>
-                    <use fill="#FF7E1B" fill-rule="nonzero" xlink:href="#a" />
+                    <use fill="" fill-rule="evenodd" xlink:href="#a" />
                   </svg>
                 </button>
-                <p id="num-of-products">0</p>
+                <p id="num-of-products">1</p>
                 <button id="increase" onclick="increase()">
                   <svg
                     width="12"
@@ -118,12 +110,12 @@ function renderProducts() {
                         id="b"
                       />
                     </defs>
-                    <use fill="#FF7E1B " fill-rule="nonzero" xlink:href="#b" />
+                    <use fill="" fill-rule="evenodd" xlink:href="#b" />
                   </svg>
                 </button>
               </div>
 
-              <div class="add-to-cart" onclick="addToCart()">
+              <div class="add-to-cart" onclick="addToCart(${product.id})">
                 <button>
                   <svg
                     width="22"
@@ -142,92 +134,227 @@ function renderProducts() {
             </div>
           </div>
         </div>
-    `
-  })
+    `;
+  });
 }
 
 renderProducts();
 
 function openNav() {
-    document.getElementById("side-nav").style.display = "block";
-    // document.getElementsByClassName("close-icon").style.display = "block";
-  }
-  
-  function closeNav() {
-    document.getElementById("side-nav").style.display = "none";
-    // document.getElementsByClassName("close-icon").style.display = "none";
-  }
-
-  function dropDown() {
-    let cartDropDownEl = document.querySelector(".cart-dropDown");
-    if (cartDropDownEl.style.display === "none") {
-      cartDropDownEl.style.display = "block";
-    } else {
-      cartDropDownEl.style.display = "none"
-    }
-  }
-
-  let slideIndex = 1;
-  showSlides(slideIndex);
-
-  // Next/previous controls
-  function moveSlide(n) {
-    showSlides(slideIndex += n);
-  }
-
-  // Thumbnail image controls
-  function currentSlide(n) {
-    showSlides(slideIndex = n);
-  }
-
-  function showSlides(n) {
-    let i;
-    let slides = document.getElementsByClassName("slides");
-    let thumbnails = document.getElementsByClassName("thumbnailImage");
-
-    if (n > slides.length) {
-      slideIndex = 1
-    } else if (n < 1) {
-      slideIndex = slides.length
-    }
-
-    for (i = 0; i < slides.length; i++) {
-      slides[i].style.display = "none";
-    }
-
-    for (i = 0; i < thumbnails.length; i++) {
-      thumbnails[i].className = thumbnails[i].className.replace(" active", "");
-    }
-
-    slides[slideIndex-1].style.display = "block";
-  thumbnails[slideIndex-1].className += " active";
-  }
-
-  let ProductNum = document.getElementById("num-of-products")
-  let productNumber = 0
-
-  function reduce() {
-    productNumber -= 1
-
-    if (productNumber <= 0) {
-      productNumber = 0
-    }
-
-    ProductNum.textContent = productNumber
-  }
-
-  function increase() {
-    productNumber += 1
-
-    if (productNumber >= 15) {
-      productNumber = 15
-    }
-
-    ProductNum.textContent = productNumber
-  }
-
-  // add to cart
-function addToCart(id) {
-  console.log()
+  document.getElementById("side-nav").style.display = "block";
+  // document.getElementsByClassName("close-icon").style.display = "block";
 }
-  
+
+function closeNav() {
+  document.getElementById("side-nav").style.display = "none";
+  // document.getElementsByClassName("close-icon").style.display = "none";
+}
+
+function dropDown() {
+  let cartDropDownEl = document.querySelector(".cart-dropDown");
+  if (cartDropDownEl.style.display === "none") {
+    cartDropDownEl.style.display = "block";
+  } else {
+    cartDropDownEl.style.display = "none";
+  }
+}
+
+let slideIndex = 1;
+showSlides(slideIndex);
+
+// Next/previous controls
+function moveSlide(n) {
+  showSlides((slideIndex += n));
+}
+
+// Thumbnail image controls
+function currentSlide(n) {
+  showSlides((slideIndex = n));
+}
+
+function showSlides(n) {
+  let i;
+  let slides = document.getElementsByClassName("slides");
+  let thumbnails = document.getElementsByClassName("thumbnailImage");
+
+  if (n > slides.length) {
+    slideIndex = 1;
+  } else if (n < 1) {
+    slideIndex = slides.length;
+  }
+
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";
+  }
+
+  for (i = 0; i < thumbnails.length; i++) {
+    thumbnails[i].className = thumbnails[i].className.replace(" active", "");
+  }
+
+  slides[slideIndex - 1].style.display = "block";
+  thumbnails[slideIndex - 1].className += " active";
+}
+
+let ProductNum = document.getElementById("num-of-products");
+let productNumber = 0;
+
+function reduce() {
+  let numberOfUnits = productNumber--;
+
+  if (productNumber < 1) {
+    productNumber = 1;
+  }
+
+  ProductNum.textContent = productNumber;
+}
+
+function increase() {
+  numberOfUnits = productNumber++;
+
+  if (productNumber >= 15) {
+    productNumber = 15;
+  }
+
+  ProductNum.textContent = productNumber;
+}
+
+// cart array
+let cart = [];
+
+// add to cart
+function addToCart(id) {
+  const totalCartItemEl = document.querySelector(".total-cart-items");
+  // check if product already exists in cart
+  if (cart.some((item) => item.id === id)) {
+    alert("Product already in cart!");
+  } else {
+    const item = products.find((product) => product.id === id);
+
+    cart.push({
+      ...item,
+      numberOfUnits: Number(ProductNum.innerHTML),
+    });
+
+    totalCartItemEl.style.display = "block";
+  }
+
+  updateCart();
+}
+
+// update cart
+function updateCart() {
+  renderCartItems();
+  renderSubtotal();
+}
+
+// render cart items
+function renderCartItems() {
+  cartItemsEl.innerHTML = ""; // clear cart element
+  cart.forEach((item) => {
+    cartItemsEl.innerHTML += `
+      <div class="cart-item">
+                <img src="${item.thumnailImgSrc}" alt="" />
+                <div class="item-desc-container">
+                  <div class="item-desc">
+                    <p>${item.name}</p>
+                    <span class="prices">
+                      $${item.price}.00 x ${item.numberOfUnits} <span class ="total-price"></span>
+                    </span>
+                    <p ">
+                      
+                    </p>
+                  </div>
+                  <button class ="delete-btn" onclick ="removeItemFromCart(id)">
+                    <svg
+                      width="14"
+                      height="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                      xmlns:xlink="http://www.w3.org/1999/xlink"
+                    >
+                      <defs>
+                        <path
+                          d="M0 2.625V1.75C0 1.334.334 1 .75 1h3.5l.294-.584A.741.741 0 0 1 5.213 0h3.571a.75.75 0 0 1 .672.416L9.75 1h3.5c.416 0 .75.334.75.75v.875a.376.376 0 0 1-.375.375H.375A.376.376 0 0 1 0 2.625Zm13 1.75V14.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 1 14.5V4.375C1 4.169 1.169 4 1.375 4h11.25c.206 0 .375.169.375.375ZM4.5 6.5c0-.275-.225-.5-.5-.5s-.5.225-.5.5v7c0 .275.225.5.5.5s.5-.225.5-.5v-7Zm3 0c0-.275-.225-.5-.5-.5s-.5.225-.5.5v7c0 .275.225.5.5.5s.5-.225.5-.5v-7Zm3 0c0-.275-.225-.5-.5-.5s-.5.225-.5.5v7c0 .275.225.5.5.5s.5-.225.5-.5v-7Z"
+                          id="a"
+                        />
+                      </defs>
+                      <use fill="#C3CAD9" fill-rule="nonzero" xlink:href="#a" />
+                    </svg>
+                  </button>
+                </div>
+        </div>
+        <div class="checkout-btn">
+          <button><strong>Checkout</strong></button>
+        </div>
+      `;
+  });
+}
+
+function removeItemFromCart(id) {
+  cart = cart.filter((item) => item.id !== id);
+
+  updateCart();
+}
+
+// calculate and render subtotal
+function renderSubtotal() {
+  let totalPrice = 0,
+    totalItems = 0;
+  const totalPriceEl = document.querySelector(".total-price");
+  const totalCartItemEl = document.querySelector(".total-cart-items");
+
+  cart.forEach((item) => {
+    totalPrice += item.price * item.numberOfUnits;
+    totalItems += item.numberOfUnits;
+  });
+  totalPriceEl.innerHTML = "$" + totalPrice + ".00";
+  totalCartItemEl.innerHTML = totalItems;
+}
+
+let slidesIndex = 1;
+viewSlides(slidesIndex);
+
+// Next/previous controls
+function moveSlides(x) {
+  viewSlides((slidesIndex += x));
+}
+
+// Thumbnail image controls
+function currentSlides(x) {
+  viewSlides((slidesIndex = x));
+}
+
+function viewSlides(x) {
+  let i;
+  let slide = document.getElementsByClassName("slide");
+  let hiddenthumbnails = document.getElementsByClassName(
+    "hidden-thumbnailImage"
+  );
+
+  if (x > slide.length) {
+    slidesIndex = 1;
+  } else if (x < 1) {
+    slidesIndex = slide.length;
+  }
+
+  for (i = 0; i < slide.length; i++) {
+    slide[i].style.display = "none";
+  }
+
+  for (i = 0; i < hiddenthumbnails.length; i++) {
+    hiddenthumbnails[i].className = hiddenthumbnails[i].className.replace(
+      " active",
+      ""
+    );
+  }
+
+  slide[slidesIndex - 1].style.display = "block";
+  hiddenthumbnails[slidesIndex - 1].className += " active";
+}
+
+function openHiddenImage() {
+  hiddenImgEl.style.display = "block";
+}
+
+function closeHiddenImg() {
+  hiddenImgEl.style.display = "none";
+}
