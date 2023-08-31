@@ -1,4 +1,4 @@
-# News Homepage
+# Ecommerce Product page
 This is an e-commerce application built using html, css grid and javascript concepts such as functions, arrays and objects. 
 
 - It is very responsive and functional. You can add items to your cart and the total cost is automatically calculated. 
